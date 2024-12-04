@@ -51,7 +51,7 @@ public:
         book newBook;
         newBook.title = title;
         newBook.author = author;
-        newBook.available = false;
+        newBook.available = true;
 
         books.push_back(newBook);
     }
@@ -71,7 +71,7 @@ public:
 
     void search_book(std::string &title) {
         for (auto i : books ) {
-            if( title == title ) {
+            if( i.title == title ) {
                 std::cout << i.title << std::endl;
                 std::cout << i.author << std::endl;
                 std::cout << i.available << std::endl;
@@ -86,6 +86,7 @@ public:
             if(i.available == true) {
                 if (i.title == title) {
                     user.set_book(i);
+                    i.available = false;
                 }
             }
             else{
@@ -125,72 +126,54 @@ public:
     void handleInput() {
         int input;
         std::cin >> input;
-        std::cin.ignore();
 
-
-        switch(input) {
+        switch (input) {
             case 1: {
-                std::string title;
-                std::cout << "Enter a title: ";
+                std::string title, author;
+                std::cout << "Enter title: ";
                 std::cin >> title;
-                std::cout << "Enter a author: ";
-                std::string author;
+                std::cout << "Enter author: ";
                 std::cin >> author;
-
-                Library.add_book(title,author);
+                Library.add_book(title, author);
                 break;
             }
-
-            case 2:{
-            Library.display_books();
+            case 2:
+                Library.display_books();
+            break;
+            case 3: {
+                std::string title, username;
+                std::cout << "Enter your username: ";
+                std::cin >> username;
+                std::cout << "Enter title: ";
+                std::cin >> title;
+                user usr;
+                usr.set_name(username);
+                Library.borrow_book(title, usr);
+                break;
+            }
+            case 4: {
+                std::string title, username;
+                std::cout << "Enter your username: ";
+                std::cin >> username;
+                std::cout << "Enter title: ";
+                std::cin >> title;
+                user usr;
+                usr.set_name(username);
+                Library.return_book(title, usr);
+                break;
+            }
+            case 5: {
+                std::string title;
+                std::cout << "Enter title: ";
+                std::cin >> title;
+                Library.search_book(title);
+                break;
+            }
+            case 6:
+                running = false;
+            std::cout << "Exiting program..." << std::endl;
             break;
         }
-
-            case 3: {
-                std::string title;
-                std::cout << "Enter a title: ";
-                std::cin >> title;
-                user user;
-                Library.borrow_book(title, user);
-
-                break;
-            }
-
-            case 4: {
-                std::string input;
-                std::string title;
-                std::cout << "Enter a title: ";
-                std::cin >> title;
-                user user;
-                std::cout << "Enter username: ";
-                std::cin >> input; user.set_name(input);
-
-                Library.return_book(title,user);
-
-
-                break;
-            }
-
-            case 5:
-                std::string title;
-            std::cout << "Enter a title: ";
-            std::cin >> title;
-
-            Library.search_book(title);
-
-                break;
-
-            case 6:
-                std::cout << "exiting program..." << std::endl;
-                running = false;
-
-                break;
-
-
-        }
-
-
-
 
 
     }
