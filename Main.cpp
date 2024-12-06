@@ -3,7 +3,7 @@
 #include<map>
 #include<string>
 
-bool running = false;
+bool running = true;
 
 struct book {
     std::string title;
@@ -20,7 +20,7 @@ private:
 public:
 
     void view_borrowed() {
-        for ( auto i : borrowedBooks ) {
+        for ( auto &i : borrowedBooks ) {
             std::cout << i.title;
         }
     }
@@ -57,20 +57,21 @@ public:
     }
 
     void display_books() {
-        for (auto i : books ) {
-            std::cout << i.title << " || "; std::cout << i.author << " || ";
-            if(i.available == false) {
+        for (auto &i : books ) {
+            if ( i.available == true ) {
+                std::cout << i.title << " || "; std::cout << i.author << " || " << " Available ";
+            }
+
+            else if (i.available == false) {
                 std::cout << "Not Available" << std::endl;
             }
-            else if(i.available == true) {
-                std::cout << "Available" << std::endl;
-            }
+
 
         }
     }
 
     void search_book(std::string &title) {
-        for (auto i : books ) {
+        for (auto &i : books ) {
             if( i.title == title ) {
                 std::cout << i.title << std::endl;
                 std::cout << i.author << std::endl;
@@ -82,7 +83,7 @@ public:
     }
 
     void borrow_book(std::string &title, user &user) {
-        for (auto i : books) {
+        for (auto &i : books) {
             if(i.available == true) {
                 if (i.title == title) {
                     user.set_book(i);
@@ -101,7 +102,7 @@ public:
 
         books.push_back(newBook);
 
-        borrowedBooks.insert(std::pair<std::string,book>(newBook.title,newBook));
+
     }
 
 
@@ -126,14 +127,15 @@ public:
     void handleInput() {
         int input;
         std::cin >> input;
+        std::cin.ignore();
 
         switch (input) {
             case 1: {
                 std::string title, author;
                 std::cout << "Enter title: ";
-                std::cin >> title;
+                std::getline(std::cin, title);
                 std::cout << "Enter author: ";
-                std::cin >> author;
+                std::getline(std::cin, author);
                 Library.add_book(title, author);
                 break;
             }
@@ -143,9 +145,9 @@ public:
             case 3: {
                 std::string title, username;
                 std::cout << "Enter your username: ";
-                std::cin >> username;
+                std::getline(std::cin, username);
                 std::cout << "Enter title: ";
-                std::cin >> title;
+                std::getline(std::cin, title);
                 user usr;
                 usr.set_name(username);
                 Library.borrow_book(title, usr);
@@ -154,9 +156,9 @@ public:
             case 4: {
                 std::string title, username;
                 std::cout << "Enter your username: ";
-                std::cin >> username;
+                std::getline(std::cin, username);
                 std::cout << "Enter title: ";
-                std::cin >> title;
+                std::getline(std::cin, title);
                 user usr;
                 usr.set_name(username);
                 Library.return_book(title, usr);
@@ -165,15 +167,16 @@ public:
             case 5: {
                 std::string title;
                 std::cout << "Enter title: ";
-                std::cin >> title;
+                std::getline(std::cin, title);
                 Library.search_book(title);
                 break;
             }
             case 6:
-                running = false;
             std::cout << "Exiting program..." << std::endl;
+            running = false;
             break;
         }
+
 
 
     }
@@ -185,7 +188,7 @@ int main() {
     do {
     Program.displayInterface();
     Program.handleInput();
-    running = true;
+
     }while(running == true);
 
 
